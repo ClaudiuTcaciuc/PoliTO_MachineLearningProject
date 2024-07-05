@@ -146,7 +146,7 @@ def plot_ROC_curve(scores, y_true, cost_matrix, prior_class_prob, unique_labels=
     plt.show()
     
 def plot_bayes_error(scores, y_true, unique_labels):
-    eff_prior_log_odds = np.linspace(-3, 3, 21)
+    eff_prior_log_odds = np.linspace(-4, 4, 21)
     eff_prior = 1 / (1 + np.exp(-eff_prior_log_odds))
     normalized_DCF = []
     normalized_minDCF = []
@@ -166,7 +166,7 @@ def plot_bayes_error(scores, y_true, unique_labels):
     plt.xlabel('Effective prior probability')
     plt.ylabel('Detection Cost Function')
     plt.ylim([0, 1.1])
-    plt.xlim([-3, 3])
+    plt.xlim([-4, 4])
     plt.title('Bayes error')
     plt.legend()
     plt.show()
