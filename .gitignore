@@ -162,3 +162,4 @@ cython_debug/
 __results__/
 __results__models__/
 *.ipynb
+notebook/
