@@ -74,7 +74,7 @@ def log_gau_pdf(X, mu, sigma):
     
     return log_pdf
 
-def compute_accuracy_model_pca(X_train, y_train, X_test, y_test, models, threshold):
+def compute_accuracy_model_pca_threshold(X_train, y_train, X_test, y_test, models, threshold):
     results = {model_name: [] for model_name in models.keys()}
     
     for i in reversed(range(X_train.shape[0])):

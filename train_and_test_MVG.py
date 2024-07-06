@@ -58,12 +58,12 @@ def test_multivariate_gaussian_classifier_base():
         print(f'\t{model_name} Accuracy: {accuracy*100:.2f}% (threshold: {threshold:.2f})')
         
     print('\nMultivariate Gaussian Classifier on X_train and PCA')
-    res = utils.compute_accuracy_model_pca(X_train, y_train, X_test, y_test, models_dict, threshold)
+    res = utils.compute_accuracy_model_pca_threshold(X_train, y_train, X_test, y_test, models_dict, threshold=threshold)
     for model_name, acc in res.items():
         print(f'\t{model_name} - Best Accuracy: {max(acc, key=lambda x: x[1])}')
         
     print('\nMultivariate Gaussian Classifier on X_train_14 and PCA')
-    res = utils.compute_accuracy_model_pca(X_train_f14, y_train, X_test_f14, y_test, models_dict, threshold)
+    res = utils.compute_accuracy_model_pca_threshold(X_train_f14, y_train, X_test_f14, y_test, models_dict, threshold=threshold)
     for model_name, acc in res.items():
         print(f'\t{model_name} - Best Accuracy: {max(acc, key=lambda x: x[1])}')
 

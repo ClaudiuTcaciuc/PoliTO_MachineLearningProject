@@ -19,7 +19,6 @@ def main():
     calibration_fusion_evaluation_models()
     model_performance_gmm_eval = train_and_test_gmm_classifier_bayesian_on_evaluation_set()
     compare_models(model_performance_gmm_eval)
-    pass
 
 if __name__ == '__main__':
     main()
