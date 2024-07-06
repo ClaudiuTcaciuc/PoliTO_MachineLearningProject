@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 __results__/
+__results__models__/
+*.ipynb
