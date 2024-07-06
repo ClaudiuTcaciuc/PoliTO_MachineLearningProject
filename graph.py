@@ -205,3 +205,22 @@ def plot_overall_DCF_rbf(min_DCFs, norm_DCFs, Cs, gammas):
     plt.tight_layout()
     plt.grid()
     plt.show()
+    
+def plot_distribution_density(X=None):
+    if X is None:
+        X, _ = utils.load_data()
+
+    Xplot = np.linspace(-8, 12, 1000).reshape(-1, 1)
+
+    fig, axs = plt.subplots(2, 3, figsize=(14, 9))
+    for i in range(6):
+        X_1 = X[i:i+1, :].T
+        mean = np.mean(X_1, axis=0).reshape(-1, 1)
+        cov = np.dot((X_1 - mean).T, (X_1 - mean)) / X_1.shape[0]
+        
+        ax = axs[i//3, i%3]
+        ax.hist(X_1, bins=50, density=True, ec='black')
+        ax.plot(Xplot.ravel(), np.exp(utils.log_gau_pdf(Xplot, mean, cov)))
+        ax.set_title(f'Feature {i+1}')
+    plt.tight_layout()
+    plt.show()
