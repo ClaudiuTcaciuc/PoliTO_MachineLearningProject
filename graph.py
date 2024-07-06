@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 import seaborn as sns
 import scipy
 import utils
@@ -168,3 +169,39 @@ def plot_graph():
     plot_correlation_matrix(data=data, label=label)
     plot_pca_explained_variance(data=data)
     plot_lda_histogram(data=data, label=label, classes=classes)
+
+def plot_overall_DCF(min_DCFs, norm_DCFs, ls, title:str=""):
+    for i, l in enumerate(ls):
+        plt.plot(l, norm_DCFs[i], color = 'blue', marker = 'o')
+        plt.plot(l, min_DCFs[i], color = 'orange', marker = 'o')
+        
+    plt.xscale('log', base=10)
+    plt.xlabel('Regularization parameter (λ/C)')
+    plt.ylabel('DCF')
+    plt.title(f'Overall DCF for {title}')
+    plt.legend(['Normalized DCF', 'MinDCF'])
+    plt.show()
+
+def plot_overall_DCF_rbf(min_DCFs, norm_DCFs, Cs, gammas):
+    norm_cmap = cm.Blues  # Scale of blues for normalized DCF
+    min_cmap = cm.Reds    # Scale of reds for minDCF
+
+    # Get color scale based on the number of gammas
+    colors_norm = norm_cmap(np.linspace(0.5, 1, len(gammas)))
+    colors_min = min_cmap(np.linspace(0.5, 1, len(gammas))) 
+
+    plt.figure(figsize=(10, 6))
+
+    # Plot lines with colors
+    for i, g in enumerate(gammas):
+        plt.plot(Cs, norm_DCFs[g], marker='o', linestyle='-', color=colors_norm[i], label=f'Norm DCF (Gamma={g:.1e})')
+        plt.plot(Cs, min_DCFs[g], marker='o', linestyle='-', color=colors_min[i], label=f'Min DCF (Gamma={g:.1e})')
+
+    plt.xscale('log')
+    plt.xlabel('C (log scale)')
+    plt.ylabel('DCF')
+    plt.title('Overall DCF by Gamma and C')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.tight_layout()
+    plt.grid()
+    plt.show()

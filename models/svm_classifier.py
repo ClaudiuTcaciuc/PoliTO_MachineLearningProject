@@ -23,7 +23,7 @@ class SVMClassifier:
         if test_only and weight_path and bias_path and os.path.exists(weight_path) and os.path.exists(bias_path):
             self.weight = np.load(weight_path)
             self.bias = np.load(bias_path)
-            print("Model loaded successfully.")
+            # print("Model loaded successfully.")
         else:
             if X.shape[0] > X.shape[1]:
                 X = X.T

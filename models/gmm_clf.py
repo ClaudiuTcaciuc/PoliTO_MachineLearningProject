@@ -166,7 +166,7 @@ class GMM:
             if test_only and gmm_file and os.path.exists(gmm_file):
                 with open(gmm_file, 'rb') as f:
                     gmm = pickle.load(f)
-                print(f"GMM {i} loaded successfully.")
+                # print(f"GMM {i} loaded successfully.")
             else:
                 # Assume this function trains the GMM and returns the model
                 gmm = self.train_GMM_LBG_EM(X[:, y == i], self.n_components)

@@ -48,7 +48,7 @@ class LogisticRegression:
         # if the folder is not empty and we are testing only then load the weights
         if test_only and weights_path and os.path.exists(weights_path):
             self.weights = np.load(weights_path)
-            print("Weights loaded successfully.")
+            # print("Weights loaded successfully.")
         else:
             # Train the model
             if X.shape[0] > X.shape[1]:

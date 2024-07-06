@@ -30,7 +30,7 @@ class SVMClassifierKernel:
             self.alpha = np.load(alpha_path)
             self.support_vectors = np.load(support_vectors_path)
             self.support_vector_labels = np.load(support_vector_labels_path)
-            print("Model loaded successfully.")
+            # print("Model loaded successfully.")
         else:
             if X.shape[0] > X.shape[1]:
                 X = X.T
