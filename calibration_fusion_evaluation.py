@@ -16,15 +16,20 @@ def compare_models(models_performances):
     for model, minDCF in best_models.items():
         print(f"\t{model}: MinDCF: {minDCF:.4f}")
 
-def calibration_fusion_evaluation_models():
+def wrapper_calibration_fusion_evaluation_models():
+    priors_calibration = [0.2, 0.5, 0.8]
+    for prior_calibration in priors_calibration:
+        print(f"\n\nPrior calibration: {prior_calibration}")
+        calibration_fusion_evaluation_models(prior_calibration)
+
+def calibration_fusion_evaluation_models(prior_calibration=0.2):
     X, y = utils.load_data()
     X_train, y_train, X_test, y_test = utils.split_data(X, y)
     X_eval, y_eval = utils.load_validation_data()
     k_fold = 10
-    prior_calibration = 0.2
-    
     
     test_only = True
+    plot_bayes = True
     covariance_type = 'diagonal'
     n_best_components = 8
     prior = 0.1
@@ -71,22 +76,22 @@ def calibration_fusion_evaluation_models():
     clf_cal_lr.fit(lr_score.reshape(1, -1), y_test)
     
     print(f"GMM before calibration with prior {prior}")
-    utils.compute_statistics(gmm_score, y_test, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(gmm_score, y_test, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
     print(f"GMM calibrated with prior {prior}")
-    utils.compute_statistics(gmm_calibrated_scores, gmm_calibrated_labels, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(gmm_calibrated_scores, gmm_calibrated_labels, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
     print(f"SVM before calibration with prior {prior}")
-    utils.compute_statistics(svm_score, y_test, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(svm_score, y_test, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     print(f"SVM calibrated with prior {prior}")
-    utils.compute_statistics(svm_calibrated_scores, svm_calibrated_labels, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(svm_calibrated_scores, svm_calibrated_labels, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     print(f"LR before calibration with prior {prior}")
-    utils.compute_statistics(lr_score, y_test, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(lr_score, y_test, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
     print(f"LR calibrated with prior {prior}")
-    utils.compute_statistics(lr_calibrated_scores, lr_calibrated_labels, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(lr_calibrated_scores, lr_calibrated_labels, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
     fused_scores = []
     fused_labels = []
@@ -110,39 +115,38 @@ def calibration_fusion_evaluation_models():
     fused_labels = np.hstack(fused_labels)
 
     print(f"Fusion with prior {prior}")
-    utils.compute_statistics(fused_scores, fused_labels, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(fused_scores, fused_labels, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
     print(f"EVALUATION ON GMM 8 DIAG\n")
     gmm_score_eval = model_gmm.score_binary(X_eval)
     gmm_score_eval_calibrated = clf_cal_gmm.score(gmm_score_eval.reshape(1, -1)) - np.log(prior_calibration / (1 - prior_calibration))
 
     print(f"GMM evaluation set with prior {prior}")
-    utils.compute_statistics(gmm_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(gmm_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     print(f"GMM evaluation set calibrated with prior {prior}")
-    utils.compute_statistics(gmm_score_eval_calibrated, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(gmm_score_eval_calibrated, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     print(f"EVALUATION ON SVM RBF\n")
     svm_score_eval = model_svm.score(X_eval)
     svm_score_eval_calibrated = clf_cal_svm.score(svm_score_eval.reshape(1, -1)) - np.log(prior_calibration / (1 - prior_calibration))
     
     print(f"SVM evaluation set with prior {prior}")
-    utils.compute_statistics(svm_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(svm_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     print(f"SVM evaluation set calibrated with prior {prior}")
-    utils.compute_statistics(svm_score_eval_calibrated, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(svm_score_eval_calibrated, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     X_eval_quad = model_qlr.expand(X_eval)
     lr_score_eval = model_qlr.score(X_eval_quad) - np.log(pEmp / (1 - pEmp))
     lr_score_eval_calibrated = clf_cal_lr.score(lr_score_eval.reshape(1, -1)) - np.log(prior_calibration / (1 - prior_calibration))
     
     print(f"LR evaluation set with prior {prior}")
-    utils.compute_statistics(lr_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(lr_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     print(f"LR evaluation set calibrated with prior {prior}")
-    utils.compute_statistics(lr_score_eval_calibrated, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(lr_score_eval_calibrated, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
-    print(f"Fusion evaluation set with prior {prior}")
     score_matrix = np.vstack([gmm_score, svm_score, lr_score])
     clf_fusion = LogisticRegressionWeighted(lambda_=0, pi=prior_calibration, n_T=np.sum(y_test==1), n_F=np.sum(y_test==0))
     clf_fusion.fit(score_matrix, y_test)
@@ -151,7 +155,7 @@ def calibration_fusion_evaluation_models():
     fused_score_eval = clf_fusion.score(score_eval_matrix) - np.log(prior_calibration / (1 - prior_calibration))
     
     print(f"Fusion evaluation set with prior {prior}")
-    utils.compute_statistics(fused_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=True)
+    utils.compute_statistics(fused_score_eval, y_eval, prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
 def test_configuration_for_best_models():
     X, y = utils.load_data()
@@ -161,6 +165,7 @@ def test_configuration_for_best_models():
     covariance_type = 'diagonal'
     n_best_components = 8
     psiEig = 0.01
+    plot_bayes = True
     
     print('\nTest configuration for best models\n')
     print('\nGMM on RAW DATA for different prior probabilities\n')
@@ -170,7 +175,7 @@ def test_configuration_for_best_models():
         folder = f"gmm_{covariance_type}_{n_best_components}_components"
         model.fit(X_train, y_train, n_features=2, folder=folder, test_only=True)
         score = model.score_binary(X_test)
-        utils.compute_statistics(score, y_test, prior=prior, unique_labels=[0, 1], roc=False, bayes=True)
+        utils.compute_statistics(score, y_test, prior=prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
 
     eps = 1.0
     gamma = 1e-1
@@ -184,7 +189,7 @@ def test_configuration_for_best_models():
         folder = f"svm_rbf_raw_data_gamma_{gamma:.1e}_eps_{eps}_C_{C:.1e}".replace('.', '_').replace('e-0', 'e-')
         model.fit(X_train, y_train, folder, True)
         llr = model.score(X_test)
-        utils.compute_statistics(llr, y_test, prior=prior, unique_labels=[0, 1], roc=False, bayes=True)
+        utils.compute_statistics(llr, y_test, prior=prior, unique_labels=[0, 1], roc=False, bayes=plot_bayes)
     
     l = 0.032
     pi = 0.1
@@ -198,4 +203,4 @@ def test_configuration_for_best_models():
         folder = f"lr_quad_raw_data_pi_{pi:.1e}_lambda_{l:.1e}".replace('.', '_').replace('e-0', 'e-')
         model.fit(X_train_quad, y_train, folder=folder, test_only=True)
         llr = model.score(X_test_quad) - np.log(pEmp / (1 - pEmp))
-        utils.compute_statistics(llr, y_test, pi, unique_labels=[0, 1], roc=False, bayes=True)
+        utils.compute_statistics(llr, y_test, pi, unique_labels=[0, 1], roc=False, bayes=plot_bayes)

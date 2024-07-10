@@ -38,26 +38,26 @@ def split_data(data, label, perc=(2.0/3.0), seed=0):
     
     return data_train, label_train, data_test, label_test
 
-def compute_statistics(data):
-    """ Compute the mean, variance, std and covariance matrix of the data """
-    mu_class = np.mean(data, axis=1).reshape(-1, 1)
-    print(f'Empirical dataset mean\n{mu_class}')
+# def compute_statistics(data):
+#     """ Compute the mean, variance, std and covariance matrix of the data """
+#     mu_class = np.mean(data, axis=1).reshape(-1, 1)
+#     print(f'Empirical dataset mean\n{mu_class}')
     
-    # Centered data
-    centered_data = data - mu_class
-    print(f'Centered data shape\n{centered_data.shape}')
+#     # Centered data
+#     centered_data = data - mu_class
+#     print(f'Centered data shape\n{centered_data.shape}')
     
-    # Covariance matrix
-    cov_matrix = np.cov(centered_data)
-    print(f'Covariance matrix shape\n{cov_matrix.shape}')
+#     # Covariance matrix
+#     cov_matrix = np.cov(centered_data)
+#     print(f'Covariance matrix shape\n{cov_matrix.shape}')
 
-    # Variance
-    var = np.var(data, axis=1).reshape(-1, 1)
-    print(f'Variance\n {var}')
+#     # Variance
+#     var = np.var(data, axis=1).reshape(-1, 1)
+#     print(f'Variance\n {var}')
     
-    # std
-    std = np.std(data, axis=1).reshape(-1, 1)
-    print(f'Standard deviation\n{std}')
+#     # std
+#     std = np.std(data, axis=1).reshape(-1, 1)
+#     print(f'Standard deviation\n{std}')
     
 def log_gau_pdf(X, mu, sigma):
     
