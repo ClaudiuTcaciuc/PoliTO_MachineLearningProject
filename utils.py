@@ -37,27 +37,6 @@ def split_data(data, label, perc=(2.0/3.0), seed=0):
     label_test = label[index_test]
     
     return data_train, label_train, data_test, label_test
-
-# def compute_statistics(data):
-#     """ Compute the mean, variance, std and covariance matrix of the data """
-#     mu_class = np.mean(data, axis=1).reshape(-1, 1)
-#     print(f'Empirical dataset mean\n{mu_class}')
-    
-#     # Centered data
-#     centered_data = data - mu_class
-#     print(f'Centered data shape\n{centered_data.shape}')
-    
-#     # Covariance matrix
-#     cov_matrix = np.cov(centered_data)
-#     print(f'Covariance matrix shape\n{cov_matrix.shape}')
-
-#     # Variance
-#     var = np.var(data, axis=1).reshape(-1, 1)
-#     print(f'Variance\n {var}')
-    
-#     # std
-#     std = np.std(data, axis=1).reshape(-1, 1)
-#     print(f'Standard deviation\n{std}')
     
 def log_gau_pdf(X, mu, sigma):
     
@@ -77,7 +56,7 @@ def log_gau_pdf(X, mu, sigma):
 def compute_accuracy_model_pca_threshold(X_train, y_train, X_test, y_test, models, threshold):
     results = {model_name: [] for model_name in models.keys()}
     
-    for i in reversed(range(X_train.shape[0])):
+    for i in reversed(range(X_train.shape[0]-1)):
         X_train_pca, eig_v = pp.pca(data=X_train, n_features=i+1, required_eigen_vectors=True)
         X_test_pca = np.dot(eig_v.T, X_test)
         
@@ -134,7 +113,7 @@ def compute_statistics(llr, y_true, prior, C_fp=1, C_fn=1, unique_labels=None, r
 def compute_accuracy_model_pca(X_train, y_train, X_test, y_test, models, pi):
     results = {model_name: [] for model_name in models.keys()}
     
-    for i in reversed(range(X_train.shape[0])):
+    for i in reversed(range(X_train.shape[0]-1)):
         X_train_pca, eig_v = pp.pca(data=X_train, n_features=i+1, required_eigen_vectors=True)
         X_test_pca = np.dot(eig_v.T, X_test)
         

@@ -116,10 +116,10 @@ def train_and_test_multivariate_gaussian_classifier_bayesian():
         for model_name, acc in res.items():
             print(f'\t{model_name} - Best minDCF: {min(acc, key=lambda x: x[2])}')
         
-    print('\nROC and Bayes error plot for the application with the lowest minDCF in PCA DATA: MVG PCA 6\n')
+    print('\nROC and Bayes error plot for the application with the lowest minDCF in PCA DATA: MVG PCA 5\n')
     pi = 0.1
     
-    X_train_pca, eig_v = pp.pca(data=X_train, n_features=6, required_eigen_vectors=True)
+    X_train_pca, eig_v = pp.pca(data=X_train, n_features=5, required_eigen_vectors=True)
     X_test_pca = np.dot(eig_v.T, X_test)
 
     for model_name, model in models_dict.items():
