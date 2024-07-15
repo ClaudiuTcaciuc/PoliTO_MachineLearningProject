@@ -34,7 +34,7 @@ def test_multivariate_gaussian_classifier_base():
     
     print('\nPlotting correlation matrix \n')
     plot_correlation_matrix(X, y)
-    print('\nPlotting correlation matrix \n')
+    print('\nPlotting correlation matrix on features 1 to 4\n')
     plot_correlation_matrix(X_f14, y)
     
     X_train_f14, _, X_test_f14, _ = utils.split_data(X_f14, y)
